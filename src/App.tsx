@@ -1,26 +1,37 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route,Routes, Link } from 'react-router-dom'
 import logo from './logo.svg';
 import './App.css';
+import { Typography,AppBar,Card,CardActions, CardContent,CardMedia,CssBaseline,Grid,Toolbar,Container} from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
+import { NestCamWiredStand } from '@mui/icons-material';
+import RegisterForm from './components/RegisterForm/RegisterForm';
+import LoginForm from './components/LoginForm/LoginForm';
+import NavBar from './components/NavBar/NavBar';
+import CreateMessageForm from './components/CreateMessageForm/CreateMessageForm';
+import {CredentialsProvider} from  './components/CredentialsContext/CredentialsContext'
+import {CredentialsContext} from './components/CredentialsContext/CredentialsContext';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <CredentialsProvider> 
+        <NavBar id="navbar"/>
+        <Routes>
+          <Route path="/register" element={<RegisterForm/>} />
+          <Route path="/login" element={ <LoginForm/>} />
+          <Route path="/create" element={<CreateMessageForm />} />
+        </Routes>
+      </CredentialsProvider>
+    </Router>
   );
 }
-
 export default App;
