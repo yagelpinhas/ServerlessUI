@@ -7,6 +7,12 @@ function CredentialsProvider({children}:any){
     let [isLoggedIn,setIsLoggedIn] =useState(false);
     let [nameOfUser,setNameOfUser]=useState("")
     let [token,setToken]=useState("")
+
+    function changeState(){
+      setIsLoggedIn(true)
+      setNameOfUser("adir")
+      setToken("abc")
+    }
     useEffect(()=>{
         setIsLoggedIn(localStorage["isLoggedIn"]=="true"? true: false)
         setNameOfUser(localStorage["nameOfUser"])

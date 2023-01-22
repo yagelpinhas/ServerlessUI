@@ -20,7 +20,8 @@ import {CredentialsContext} from '../CredentialsContext/CredentialsContext';
 import { ContextStructure } from '../CredentialsContext/ContextStructure';
 import {useContext} from 'react';
 
-function NavBar(props: any) {
+
+function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const pagesIfNotLoggedIn = ['Register', 'Login'];
@@ -29,7 +30,9 @@ function NavBar(props: any) {
   const {nameOfUser}: ContextStructure = useContext(CredentialsContext)
   const {isLoggedIn}: ContextStructure = useContext(CredentialsContext)
   const {logout}: any = useContext(CredentialsContext)
-
+  //const useAppContext = useContext(CredentialsContext);
+  console.log("is logged in is: ")
+  console.log(isLoggedIn)
   function relevantPages():string[]{
     if (isLoggedIn){
       return pagesIfLoggedin

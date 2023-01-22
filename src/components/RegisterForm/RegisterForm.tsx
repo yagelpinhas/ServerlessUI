@@ -45,6 +45,7 @@ export default function RegisterForm() {
     }
   }
   return (
+    <div>
     <Box
       component="form"
       sx={{
@@ -59,9 +60,10 @@ export default function RegisterForm() {
         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
         <TextField
           id="outlined-disabled"
-          label="Usernamse"
+          label="Username"
           value={usernameInput}
           onChange={(newValue)=> setUsernameInput(newValue.target.value)}
+          inputProps={{"data-testid":"register-username-id"}}
         />
         </div>
         <div>
@@ -73,13 +75,14 @@ export default function RegisterForm() {
           autoComplete="current-password"
           value={passwordInput}
           onChange={(newValue)=> setPasswordInput(newValue.target.value)}
+          inputProps={{"data-testid":"register-password-id"}}
         />
         <div></div>
-        <Button variant="contained" color="info" onClick={register}>Register</Button>
+        <Button variant="contained" color="info" onClick={register} data-testid="register-button-id">Register</Button>
         </div>
       </div>
       <ToastContainer />
     </Box>
-    
+    </div>
   );
 }

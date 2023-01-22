@@ -20,11 +20,13 @@ import CreateMessageForm from './components/CreateMessageForm/CreateMessageForm'
 import {CredentialsProvider} from  './components/CredentialsContext/CredentialsContext'
 import {CredentialsContext} from './components/CredentialsContext/CredentialsContext';
 
+
+
 function App() {
   return (
     <Router>
       <CredentialsProvider> 
-        <NavBar id="navbar"/>
+      <NavBar /> 
         <Routes>
           <Route path="/register" element={<RegisterForm/>} />
           <Route path="/login" element={ <LoginForm/>} />

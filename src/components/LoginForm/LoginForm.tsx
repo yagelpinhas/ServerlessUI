@@ -72,9 +72,10 @@ export default function LoginForm() {
         <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
         <TextField
           id="outlined-disabled"
-          label="Usernamse"
+          label="Username"
           value={usernameInput}
           onChange={(newValue)=> setUsernameInput(newValue.target.value)}
+          inputProps={{"data-testid":"login-username-id"}}
         />
         </div>
         <div>
@@ -86,10 +87,10 @@ export default function LoginForm() {
           autoComplete="current-password"
           value={passwordInput}
           onChange={(newValue)=> setPasswordInput(newValue.target.value)}
+          inputProps={{"data-testid":"login-password-id"}}
         />
         <div></div>
-        <Button variant="contained" color="info" onClick={loginToServer}>Login
-        </Button> 
+        <Button variant="contained" color="info" onClick={loginToServer} data-testid="login-button-id">Login</Button> 
         </div>
       </div>
       <ToastContainer />

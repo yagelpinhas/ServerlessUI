@@ -62,6 +62,7 @@ export default function CreateMessageForm() {
           label="Item"
           value={itemInput}
           onChange={(newValue)=> setItemInput(newValue.target.value)}
+          inputProps={{"data-testid":"create-message-form-item-id"}}
         />
         </div>
         <div>
@@ -70,9 +71,10 @@ export default function CreateMessageForm() {
           label="Content"
           value={contentInput}
           onChange={(newValue)=> setContentInput(newValue.target.value)}
+          inputProps={{"data-testid":"create-message-form-content-id"}}
         />
         <div></div>
-        <Button variant="contained" color="info" onClick={createMessage}>Create Message</Button>
+        <Button variant="contained" color="info" onClick={createMessage} data-testid="create-message-button-id">Create Message</Button>
         </div>
       </div>
       <ToastContainer />
