@@ -1,0 +1,24 @@
+label {
+    font-size: .9rem;
+    color: rgb(13, 13, 232);
+  }
+  
+  input.form-control, input.form-control:focus {
+    background: white;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .error {
+    color: red;
+    font-size: .9rem;
+  }
+
+.inputclass{
+  width: 100px;
+  height: 100px;
+}

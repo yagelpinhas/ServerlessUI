@@ -41,31 +41,48 @@ it("renders login", () => {
   expect(childElement).toBeTruthy();
 });
 
-it("renders Create Item", () => {
-  /*
-  const wrapper = shallow(<CredentialsProvider/>)
-  const instance = wrapper.instance()
-  instance.changeState()
-  const navBar = render(
-    <NavBar data-testid="navbarid" disable>
-      {" "}
-    </NavBar>,
-    { wrapper: wrapper }
-  );
-  const childElement = navBar.getAllByText("Create Item")
-  expect(childElement).toBeTruthy();
-  expect(childElement[0]).toBeInTheDocument();
-  */
-  
-});
 
 it("renders Log Out", () => {
-  
   const isLoggedIn =true
-  const navBar = render(<Router><CredentialsProvider value={isLoggedIn}>
-      <NavBar />
-  </CredentialsProvider> </Router>)
+  const navBar = render(<Router>
+    <CredentialsContext.Provider
+    value={{isLoggedIn:true}}
+    >
+      <NavBar></NavBar>  
+      </CredentialsContext.Provider>
+   </Router>)
+
   const childElement = navBar.getAllByText("Log Out")
+  expect(childElement).toBeTruthy();
+  expect(childElement[0]).toBeInTheDocument();
+  
+});
+it("renders Create Item", () => {
+  const isLoggedIn =true
+  const navBar = render(<Router>
+    <CredentialsContext.Provider
+    value={{isLoggedIn:true}}
+    >
+      <NavBar></NavBar>  
+      </CredentialsContext.Provider>
+   </Router>)
+
+  const childElement = navBar.getAllByText("Create Message")
+  expect(childElement).toBeTruthy();
+  expect(childElement[0]).toBeInTheDocument();
+});
+
+it("renders Hello", () => {
+  const isLoggedIn =true
+  const navBar = render(<Router>
+    <CredentialsContext.Provider
+    value={{isLoggedIn:true, nameOfUser:"Tali"}}
+    >
+      <NavBar></NavBar>  
+      </CredentialsContext.Provider>
+   </Router>)
+
+  const childElement = navBar.getAllByText("Hello Tali !")
   expect(childElement).toBeTruthy();
   expect(childElement[0]).toBeInTheDocument();
   

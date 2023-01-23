@@ -17,14 +17,14 @@ it("renders Create Message",()=>{
 
 it("renders Item",()=>{
     const createMessageForm = render(<CreateMessageForm></CreateMessageForm>,{wrapper: MemoryRouter} )
-    const childElement = createMessageForm.getAllByText("Item")
+    const childElement = createMessageForm.getAllByText("item")
     expect(childElement).toBeTruthy();
     expect(childElement[0]).toBeInTheDocument();
 })
 
 it("renders Content",()=>{
     const createMessageForm = render(<CreateMessageForm></CreateMessageForm>,{wrapper: MemoryRouter} )
-    const childElement = createMessageForm.getAllByText("Content")
+    const childElement = createMessageForm.getAllByText("content")
     expect(childElement).toBeTruthy();
     expect(childElement[0]).toBeInTheDocument();
 })

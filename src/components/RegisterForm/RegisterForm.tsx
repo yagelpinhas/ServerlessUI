@@ -13,6 +13,9 @@ import { ToastContainer } from "react-toastify";
 import {CredentialsContext} from '../CredentialsContext/CredentialsContext';
 import CircularProgress from '@mui/material/CircularProgress';
 import { setFlagsFromString } from 'v8';
+import { Formik , Form, useField, ErrorMessage} from 'formik';
+import * as Yup from 'yup';
+import { FieldText } from '../FieldText/FieldText';
 
 
 const apiManager: ApiManager = new ApiManager()
@@ -20,22 +23,27 @@ export default function RegisterForm() {
   const [usernameInput,setUsernameInput] = React.useState<string>("")
   const [passwordInput,setPasswordInput] = React.useState<string>("")
   const [loading,setLoading]=React.useState<boolean>(false)
-  const checkValidity=():boolean=>{
-    return usernameInput!=""&&passwordInput!=""
+  const validate = Yup.object({
+    Username: Yup.string().min(3,'Must be 3 characters or more').required('Username Required'),
+    Password: Yup.string().min(8,'must be 8 characters or more').required('Password Required')
+  })
+
+  const checkValidity=(newUserName: string,newPassword: string):boolean=>{
+    return newUserName!=""&&newPassword!=""
   }
-  const register = async function(){
+  const register = async function(newUserName:string, newPassword:string){
     async function registerPostToServerless(){
-      let response = await axios.post(apiManager.getRegisterApi(),{"username":usernameInput,"password":passwordInput})
+      let response = await axios.post(apiManager.getRegisterApi(),{"username":newUserName,"password":newPassword})
       if (response.status==200){
-        notify(true,`User: ${usernameInput} has been created successfully`)
+        notify(true,`User: ${newUserName} has been created successfully`)
       }
       else{
         notify(false,"Error")
       }
       setLoading(false)
     }
-    if (!checkValidity()){
-      notify(false,`One of the fields is missing.`)
+    if (!checkValidity(newUserName,newPassword)){
+      notify(false,`one of the fields is missing.`)
     }
     else{
       setLoading(true)
@@ -45,44 +53,53 @@ export default function RegisterForm() {
     }
   }
   return (
-    <div>
-    <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch'},
-      }}
-      noValidate
-      autoComplete="off"
+    <Formik
+    initialValues={
+      {
+        "Username":"",
+        "Password":""
+      }
+    }
+    onSubmit={values=>{
+      console.log("got in")
+    }}
+    validationSchema={validate}
     >
-      {loading == true? <CircularProgress />: null}
-      <div>
+      {formik =>(
         <div>
-        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-        <TextField
-          id="outlined-disabled"
-          label="Username"
-          value={usernameInput}
-          onChange={(newValue)=> setUsernameInput(newValue.target.value)}
-          inputProps={{"data-testid":"register-username-id"}}
-        />
-        </div>
-        <div>
-        <PasswordIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-        <TextField
-          id="outlined-password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          value={passwordInput}
-          onChange={(newValue)=> setPasswordInput(newValue.target.value)}
-          inputProps={{"data-testid":"register-password-id"}}
-        />
-        <div></div>
-        <Button variant="contained" color="info" onClick={register} data-testid="register-button-id">Register</Button>
-        </div>
-      </div>
-      <ToastContainer />
-    </Box>
-    </div>
+          
+         <Form>
+         
+         <Box
+           component="form"
+           sx={{
+             '& .MuiTextField-root': { m: 1, width: '25ch'},
+           }}
+           noValidate
+           autoComplete="off"
+         >
+           {loading == true? <CircularProgress />: null}
+             <div>
+             <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <FieldText label="username" name="Username" type="text" testid="register-username-id" />
+             </div>
+             <div>
+             <PasswordIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+             <FieldText label="password" name="Password" type="text" testid="register-password-id"/>
+             <div></div>
+        
+             <Button variant="contained" color="info" onClick={()=>{register(formik.values.Username,formik.values.Password)}} data-testid="register-button-id" >Register</Button>
+             </div>
+           <ToastContainer />
+         </Box>
+         
+         </Form>
+         
+         </div>
+      )}
+      
+       
+    
+    </Formik>
   );
 }

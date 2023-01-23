@@ -11,6 +11,9 @@ import { ToastContainer } from "react-toastify";
 import {CredentialsContext} from '../CredentialsContext/CredentialsContext';
 import {useContext} from 'react';
 import { ContextStructure } from '../CredentialsContext/ContextStructure';
+import { Formik , Form, useField, ErrorMessage} from 'formik';
+import * as Yup from 'yup';
+import { FieldText } from '../FieldText/FieldText';
 
 const apiManager: ApiManager = new ApiManager()
 export default function CreateMessageForm() {
@@ -18,13 +21,17 @@ export default function CreateMessageForm() {
   const [contentInput,setContentInput] = React.useState<string>("")
   const [loading,setLoading]=React.useState<boolean>(false)
   const {token}: ContextStructure = useContext(CredentialsContext)
-  const checkValidity=(): boolean=>{
-    return itemInput!=""&&contentInput!=""
+  const validate = Yup.object({
+    Item: Yup.string().min(3,'Must be 4 characters or more').required('Item Required'),
+    Content: Yup.string().min(8,'must be 4 characters or more').required('Content Required')
+  })
+  const checkValidity=(newItem:string , newContent: string): boolean=>{
+    return newItem!=""&&newContent!=""
   }
-  const createMessage = async function(){
+  const createMessage = async function(newItem: string, newContent: string){
     async function createMessagePostToServerless(){
       let response = await axios.post(apiManager.getMessageApi(),
-                    {"item":itemInput,"content":contentInput},
+                    {"item":newItem,"content":newContent},
                     {headers: {Authorization: `Bearer ${token}`}}
                     )
       if (response.status==200){
@@ -35,7 +42,7 @@ export default function CreateMessageForm() {
       }
       setLoading(false)
     }
-    if (!checkValidity()){
+    if (!checkValidity(newItem,newContent)){
       notify(false,`one of the fields is missing.`)
     }
     else{
@@ -46,39 +53,53 @@ export default function CreateMessageForm() {
     }
   }
   return (
-    <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch'},
-      }}
-      noValidate
-      autoComplete="off"
+    <Formik
+    initialValues={
+      {
+        "Item":"",
+        "Content":""
+      }
+    }
+    onSubmit={values=>{
+      console.log("got in")
+    }}
+    validationSchema={validate}
     >
-      {loading == true? <CircularProgress />: null}
-      <div>
+      {formik =>(
         <div>
-        <TextField
-          id="outlined-disabled"
-          label="Item"
-          value={itemInput}
-          onChange={(newValue)=> setItemInput(newValue.target.value)}
-          inputProps={{"data-testid":"create-message-form-item-id"}}
-        />
-        </div>
-        <div>
-        <TextField
-          id="outlined-password-input"
-          label="Content"
-          value={contentInput}
-          onChange={(newValue)=> setContentInput(newValue.target.value)}
-          inputProps={{"data-testid":"create-message-form-content-id"}}
-        />
-        <div></div>
-        <Button variant="contained" color="info" onClick={createMessage} data-testid="create-message-button-id">Create Message</Button>
-        </div>
-      </div>
-      <ToastContainer />
-    </Box>
+          
+         <Form>
+         
+         <Box
+           component="form"
+           sx={{
+             '& .MuiTextField-root': { m: 1, width: '25ch'},
+           }}
+           noValidate
+           autoComplete="off"
+         >
+           {loading == true? <CircularProgress />: null}
+             <div>
+             
+              <FieldText label="item" name="Item" type="text" testid="create-message-form-item-id" />
+             </div>
+             <div>
+             
+             <FieldText label="content" name="Content" type="text" testid="create-message-form-content-id"/>
+             <div></div>
+        
+             <Button variant="contained" color="info" onClick={()=>{createMessage(formik.values.Item,formik.values.Content)}} data-testid="create-message-button-id" >Create Message</Button>
+             </div>
+           <ToastContainer />
+         </Box>
+         
+         </Form>
+         
+         </div>
+      )}
+      
+       
     
-  );
+    </Formik>
+  )
 }

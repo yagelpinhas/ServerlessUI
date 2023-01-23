@@ -31,13 +31,12 @@ function NavBar() {
   const {isLoggedIn}: ContextStructure = useContext(CredentialsContext)
   const {logout}: any = useContext(CredentialsContext)
   //const useAppContext = useContext(CredentialsContext);
-  console.log("is logged in is: ")
-  console.log(isLoggedIn)
   function relevantPages():string[]{
     if (isLoggedIn){
       return pagesIfLoggedin
     }
     else{
+
       return pagesIfNotLoggedIn
     }
   }

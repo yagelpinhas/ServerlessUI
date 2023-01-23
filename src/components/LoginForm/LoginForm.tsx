@@ -14,7 +14,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import {CredentialsContext} from '../CredentialsContext/CredentialsContext';
 import { ContextStructure } from '../CredentialsContext/ContextStructure';
 import {useContext} from 'react';
-
+import { Formik , Form, useField, ErrorMessage} from 'formik';
+import * as Yup from 'yup';
+import { FieldText } from '../FieldText/FieldText';
 
 const apiManager: ApiManager = new ApiManager()
 
@@ -24,18 +26,22 @@ export default function LoginForm() {
   const [loading,setLoading]=React.useState<boolean>(false)
   const {login} : any = useContext(CredentialsContext)
   const {isLoggedIn}: ContextStructure = useContext(CredentialsContext)
+  const validate = Yup.object({
+    Username: Yup.string().min(3,'Must be 3 characters or more').required('Username Required'),
+    Password: Yup.string().min(8,'must be 8 characters or more').required('Password Required')
+  })
 
-  const checkValidity=():boolean=>{
-    return usernameInput!=""&&passwordInput!=""
+  const checkValidity=(newUserName: string,newPassword: string):boolean=>{
+    return newUserName!=""&&newPassword!=""
   }
 
-  const loginToServer = async function(){
+  const loginToServer = async function(newUserName:string,newPassword:string){
     async function loginPostToServerless(){
       try{
-      let response = await axios.post(apiManager.getLoginApi(),{"username":usernameInput,"password":passwordInput})
+      let response = await axios.post(apiManager.getLoginApi(),{"username":newUserName,"password":newPassword})
       if (response.status==200){
         let token: string = response.data.jwt
-        login(usernameInput,token)
+        login(newUserName,token)
         notify(true,`User: ${usernameInput} has logged in successfully`)
       }
       }
@@ -46,7 +52,7 @@ export default function LoginForm() {
       }
       setLoading(false)
     }
-    if (!checkValidity()){
+    if (!checkValidity(newUserName,newPassword)){
       notify(false,`one of the fields is missing.`)
     }
     else{
@@ -57,45 +63,54 @@ export default function LoginForm() {
     }
   }
   return ( isLoggedIn == false?
-    <div>
-    <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch'},
-      }}
-      noValidate
-      autoComplete="off"
+    <Formik
+    initialValues={
+      {
+        "Username":"",
+        "Password":""
+      }
+    }
+    onSubmit={values=>{
+      console.log("got in")
+    }}
+    validationSchema={validate}
     >
-      {loading == true? <CircularProgress />: null}
-      <div>
+      {formik =>(
         <div>
-        <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-        <TextField
-          id="outlined-disabled"
-          label="Username"
-          value={usernameInput}
-          onChange={(newValue)=> setUsernameInput(newValue.target.value)}
-          inputProps={{"data-testid":"login-username-id"}}
-        />
-        </div>
-        <div>
-        <PasswordIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-        <TextField
-          id="outlined-password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          value={passwordInput}
-          onChange={(newValue)=> setPasswordInput(newValue.target.value)}
-          inputProps={{"data-testid":"login-password-id"}}
-        />
-        <div></div>
-        <Button variant="contained" color="info" onClick={loginToServer} data-testid="login-button-id">Login</Button> 
-        </div>
-      </div>
-      <ToastContainer />
-    </Box>
-    </div> : <div></div> 
+          
+         <Form>
+         
+         <Box
+           component="form"
+           sx={{
+             '& .MuiTextField-root': { m: 1, width: '25ch'},
+           }}
+           noValidate
+           autoComplete="off"
+         >
+           {loading == true? <CircularProgress />: null}
+             <div>
+             <AccountCircle sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+              <FieldText label="username" name="Username" type="text" testid="login-username-id" />
+             </div>
+             <div>
+             <PasswordIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+             <FieldText label="password" name="Password" type="text" testid="login-password-id"/>
+             <div></div>
+        
+             <Button variant="contained" color="info" onClick={()=>{loginToServer(formik.values.Username,formik.values.Password)}} data-testid="login-button-id" >Login</Button>
+             </div>
+           <ToastContainer />
+         </Box>
+         
+         </Form>
+         
+         </div>
+      )}
+      
+       
+    
+    </Formik> : <div></div>
     
   );
 }

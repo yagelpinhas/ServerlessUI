@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import ReactDOM from 'react-dom'
 import LoginForm from "../LoginForm";
-import {render,cleanup, getByTestId, getByText,fireEvent} from '@testing-library/react'
+import {render,cleanup, getByTestId, getByText,fireEvent, screen , getByRole} from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom';
 
 import renderer from "react-test-renderer"
@@ -26,7 +26,7 @@ it("renders Username",()=>{
     const loginForm = render(<CredentialsProvider>
         <LoginForm />
     </CredentialsProvider>)
-    const childElement = loginForm.getAllByText("Username")
+    const childElement = loginForm.getAllByText("username")
     expect(childElement).toBeTruthy();
     expect(childElement[0]).toBeInTheDocument();
 })
@@ -35,7 +35,7 @@ it("renders Password",()=>{
     const loginForm = render(<CredentialsProvider>
         <LoginForm />
     </CredentialsProvider>)
-    const childElement = loginForm.getAllByText("Password")
+    const childElement = loginForm.getAllByText("password")
     expect(childElement).toBeTruthy();
     expect(childElement[0]).toBeInTheDocument();
 })
@@ -64,7 +64,7 @@ it("inputs act normal",()=>{
 })
 
 
-it("clicks without error",()=>{
+it("clicks without error",async ()=>{
     const {getByTestId} = render(<CredentialsProvider>
         <LoginForm />
     </CredentialsProvider>);
@@ -76,5 +76,16 @@ it("clicks without error",()=>{
     fireEvent.click(loginButton)
 })
 
-
+it("empty fields",async ()=>{
+    const {getByTestId}= render(<CredentialsProvider>
+        <LoginForm />
+    </CredentialsProvider>);
+    const username = getByTestId("login-username-id");
+    const password = getByTestId("login-password-id");
+    const loginButton=getByTestId("login-button-id")
+    fireEvent.change(username,{target:{value:""}})
+    fireEvent.change(password,{target:{value:""}})
+    fireEvent.click(loginButton)
+    expect(await screen.findByText("one of the fields is missing.")).toBeInTheDocument();
+})
 
