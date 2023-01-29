@@ -3,7 +3,7 @@ import { apiAddress } from "./ApiAddress"
 class ApiManager{
     registerApi:string =apiAddress+"register"
     loginApi:string = apiAddress+"login"
-    messageApi:string =apiAddress+"message"
+    messageApi:string =apiAddress+"messages"
 
     getRegisterApi(): string{
         return this.registerApi

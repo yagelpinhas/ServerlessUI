@@ -1,0 +1,8 @@
+.items-form{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+#new-content-id{
+    width:270px;
+}

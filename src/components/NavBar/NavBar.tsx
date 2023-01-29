@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import LoginIcon from '@mui/icons-material/Login';
+import AppsIcon from '@mui/icons-material/Apps';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -25,7 +26,7 @@ function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const pagesIfNotLoggedIn = ['Register', 'Login'];
-  const pagesIfLoggedin = ['Create Message','Log Out'];
+  const pagesIfLoggedin = ['Create Message','Items','Log Out'];
   const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
   const {nameOfUser}: ContextStructure = useContext(CredentialsContext)
   const {isLoggedIn}: ContextStructure = useContext(CredentialsContext)
@@ -83,15 +84,16 @@ function NavBar() {
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {relevantPages().map((page: string) => (
-              <div>
-            <Link to={page=="Create Message"? "/create" : page=="Log Out"? "/": "/"+page}>
+              <div key={page}>
+               
+            <Link style={{textDecoration:'none'}} to={page=="Create Message"? "/create" : page=="Log Out"? "/": "/"+page}>
               <Button
-                key={page}
+                
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 onClick={page=="Log Out"? logout : null}
               >
                 {page}
-                {page=="Login"? <LoginIcon></LoginIcon>: page=="Log Out"? <LogoutIcon></LogoutIcon>: page=="Create Message"? <PostAddIcon sx={{padding:-4}}></PostAddIcon>: page=="Register"? <ContactPageIcon></ContactPageIcon>:<Icon></Icon>}
+                {page=="Login"? <LoginIcon></LoginIcon>: page=="Log Out"? <LogoutIcon></LogoutIcon>: page=="Create Message"? <PostAddIcon sx={{padding:-4}}></PostAddIcon>: page=="Register"? <ContactPageIcon></ContactPageIcon>: page=="Items"? <AppsIcon> </AppsIcon>:<Icon></Icon>}
               </Button>
               </Link>        
               </div>

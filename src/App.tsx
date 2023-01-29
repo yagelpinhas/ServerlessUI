@@ -16,6 +16,7 @@ import { NestCamWiredStand } from '@mui/icons-material';
 import RegisterForm from './components/RegisterForm/RegisterForm';
 import LoginForm from './components/LoginForm/LoginForm';
 import NavBar from './components/NavBar/NavBar';
+import ItemsForm from './components/ItemsForm/ItemsForm';
 import CreateMessageForm from './components/CreateMessageForm/CreateMessageForm';
 import {CredentialsProvider} from  './components/CredentialsContext/CredentialsContext'
 import {CredentialsContext} from './components/CredentialsContext/CredentialsContext';
@@ -31,6 +32,7 @@ function App() {
           <Route path="/register" element={<RegisterForm/>} />
           <Route path="/login" element={ <LoginForm/>} />
           <Route path="/create" element={<CreateMessageForm />} />
+          <Route path="/items" element ={<ItemsForm/>} />
         </Routes>
       </CredentialsProvider>
     </Router>
