@@ -48,6 +48,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { SettingsInputAntennaTwoTone } from "@mui/icons-material";
 import notify from '../Toast/Toast';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const apiManager: ApiManager = new ApiManager();
 function ItemsForm() {
@@ -61,7 +62,7 @@ function ItemsForm() {
   const [moreItems, setMoreItems] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
   const [isLoading,setIsLoading]=useState<boolean>(false);
-
+  const [completedUpdate,setCompletedUpdate]=useState<boolean>(false);
 
   
   const loadItems = async () => {
@@ -118,7 +119,7 @@ function ItemsForm() {
     deleteItemfromServer();
   };
 
-  const updateItem = () => {
+  const updateItem = async () => {
     async function updateItemInServer(newContent: string) {
       let address = apiManager.getMessageApi() + `/${selectedItemId}`;
       console.log("wanting to update item : ");
@@ -134,8 +135,10 @@ function ItemsForm() {
         notify(true,`Updated the content of  ${selectedItem} to ${selectedContent}`)
       
     }
-    
-    updateItemInServer(selectedContent);
+    setIsLoading(true)
+    await updateItemInServer(selectedContent);
+    setIsLoading(false)
+    setCompletedUpdate(true)
   };
 
   const openPopUp = (selectedItemId: string, selectedItem: string) => {
@@ -148,6 +151,7 @@ function ItemsForm() {
     setOpen(false);
     setSelectedItemId("");
     setSelectedItem("")
+    setCompletedUpdate(false)
   };
 
   const handleTextFieldChange = function (e: any) {
@@ -180,9 +184,13 @@ function ItemsForm() {
         ))}
       </div>
       <div>
+        
+      
         <Dialog open={open} onClose={closePopUp}>
+        
           <DialogTitle>Change The Content Of The Item {selectedItem}</DialogTitle>
           <DialogContent>
+            {isLoading==true? <CircularProgress></CircularProgress>: completedUpdate==true? <div className="successtext"> Updated The Content Successfully</div> : null}
             <DialogContentText>
               Please insert the new value. This will update the content of the
               item in the storage.
