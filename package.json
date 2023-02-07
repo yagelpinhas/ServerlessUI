@@ -54,6 +54,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/jquery": "^3.5.16",
+    "jest-fetch-mock": "^3.0.3",
     "react-test-renderer": "^18.2.0"
   }
 }

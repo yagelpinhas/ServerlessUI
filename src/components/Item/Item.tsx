@@ -32,10 +32,10 @@ function Item(props: any) {
 
   
   let nameOfItem: string = props.itemName
-  console.log({props})
   return (
     <div className='item-card'>
-        <span> {props.itemName}</span>
+      
+        <span>{props.itemName}</span>
         <EditIcon color="primary" onClick={() => { props.openPopUp() }}>
             
         </EditIcon>
